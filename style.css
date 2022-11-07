@@ -1,0 +1,84 @@
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+line{
+  stroke:red;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #687A8F;
+}
+li {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+path{
+  stroke:black;
+  fill:none;
+  stroke-width:2px;
+}
+
+.button {
+    background-color: #687A8F;
+    border: none;
+    color: white;
+    padding: 5px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+g.group0 path,
+g.group0 circle{
+  stroke:red;
+  fill:none;
+}
+
+g.hidden line,
+g.hidden path {
+  display:none
+}
+
+g.tick line{
+  stroke:blue;
+}
+
+g.tick text{
+  font-size:12px;
+  fill:purple;
+}
+
+g.grp:hover{
+   display:block;
+  fill:red;
+  border-radius:10px;
+
+}
+
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #F7882F;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
