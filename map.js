@@ -20,9 +20,6 @@ var svg3 = d3.select("body").append("svg")
                                     .attr("width", "700")
                                     .attr("height", "600").attr("transform","translate(300,-200)");
 
-var chartGroup5 = svgContainer_1.append("g")
-                    .attr("transform","translate(-50,50)");
-
 var margin = {left:50, right:25, top:50, bottom:0};
 var chartGroup1 = svgContainer.append("g")
                     .call(d3.drag().on("drag", dragging))
@@ -360,19 +357,20 @@ chartGroup1.call(d3.zoom()
                     chartGroup1.attr("transform", d3.event.transform);
                 }));
 
-
+var chartGroup2 = svgContainer_1.append("g")
+                    .attr("transform","translate(-50,50)");
 var parseDate = d3.timeParse("%d-%b");
 var formatMonth = d3.timeFormat('%d-%b');
 
 
                     function legend_gender(){
-                                      chartGroup5.selectAll(".legend_2").remove();
-                                      chartGroup5.selectAll(".legend_1a").remove();
+                                      chartGroup2.selectAll(".legend_2").remove();
+                                      chartGroup2.selectAll(".legend_1a").remove();
 
                                       var gender_colors = ["#e85110","#523b7a","#8f8f8f",'#376b37','#c38eb1'];
                                       var gender_legend = ["Pump","Work House","Brewery","Male","Female"];
 
-                                      chartGroup5.append("rect")
+                                      chartGroup2.append("rect")
                                                 .attr("class","legend_1a")
                                                 .attr("x","250")
                                                 .attr("y","-40")
@@ -382,7 +380,7 @@ var formatMonth = d3.timeFormat('%d-%b');
                                                 .attr("stroke-width", 2)
                                                 .attr("fill","none");
 
-                                      chartGroup5.selectAll("circle")
+                                      chartGroup2.selectAll("circle")
                                                 .data(gender_colors)
                                                 .enter().append("circle")
                                                 .attr("class","legend_1a")
@@ -392,7 +390,7 @@ var formatMonth = d3.timeFormat('%d-%b');
                                                 .attr("stroke", "black")
                                                 .attr("fill",function(d,i){return d;});
 
-                                      chartGroup5.selectAll("text")
+                                      chartGroup2.selectAll("text")
                                                 .data(gender_legend)
                                                 .enter().append("text")
                                                 .attr("class","legend_1a")
@@ -407,14 +405,14 @@ var formatMonth = d3.timeFormat('%d-%b');
 
                     function legend_ages(){
 
-                                  chartGroup5.selectAll(".legend_1a").remove();
+                                  chartGroup2.selectAll(".legend_1a").remove();
 
                                   var colors = ["#e85110","#523b7a","#8f8f8f",'#d73027','#fc8d59','#fee090','#e0f3f8','#91bfdb','#4575b4'];
 
                                   var age = ["Pump","Work House","Brewery","0-10","11-20","21-40","41-60","61-80",">80"];
 
 
-                                  chartGroup5.append("rect")
+                                  chartGroup2.append("rect")
                                             .attr("class","legend_2")
                                             .attr("x","250")
                                             .attr("y","-40")
@@ -424,7 +422,7 @@ var formatMonth = d3.timeFormat('%d-%b');
                                             .attr("stroke-width", 2)
                                             .attr("fill","none");
 
-                                  chartGroup5.selectAll("circle")
+                                  chartGroup2.selectAll("circle")
                                             .data(colors)
                                             .enter().append("circle")
                                             .attr("class","legend_2")
@@ -434,7 +432,7 @@ var formatMonth = d3.timeFormat('%d-%b');
                                             .attr("stroke", "black")
                                             .attr("fill",function(d,i){return d;});
 
-                                  chartGroup5.selectAll("text")
+                                  chartGroup2.selectAll("text")
                                             .data(age)
                                             .enter().append("text")
                                             .attr("class","legend_2")
@@ -453,11 +451,11 @@ var formatMonth = d3.timeFormat('%d-%b');
 d3.csv("deathdays.csv")
     .row(function(d){return {date: parseDate(d.date), deaths:Number(d.deaths)};})
     .get(function(error, data){
+
     var data_version2 = data;
     var height = 250;
     var width = 600;
     var tooltip4 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
-
     var max = d3.max(data, function(d){return d.deaths;});
     var minDate = d3.min(data, function(d){return d.date;});
     var maxDate = d3.max(data, function(d){return d.date;});
@@ -485,7 +483,7 @@ d3.csv("deathdays.csv")
                   .extent([[0, 0], [width, 40]])
                   .on("brush", brushed);
 
-    var chartGroup = svg1.append("g")
+    var chartGroup3 = svg1.append("g")
                       .attr("transform","translate("+margin.left+","+margin.top+")");
 
     svg1.append("defs").append("clipPath")
@@ -500,11 +498,11 @@ d3.csv("deathdays.csv")
                   .x(function(d){return x(d.date); })
                   .y(function(d){return y(d.deaths); });
 
-    chartGroup.append("path").attr("d", line(data)).attr("class","time");
-    chartGroup.append("g").attr("class","xaxis").attr("transform","translate(0,"+height+")").call(x_axis);
-    chartGroup.append("g").attr("class","yaxis").call(y_axis);
+    chartGroup3.append("path").attr("d", line(data)).attr("class","time");
+    chartGroup3.append("g").attr("class","xaxis").attr("transform","translate(0,"+height+")").call(x_axis);
+    chartGroup3.append("g").attr("class","yaxis").call(y_axis);
 
-    chartGroup.append("text")
+    chartGroup3.append("text")
               .attr("transform",
                     "translate(" + (width/2) + " ," +
                                    (height + margin.top) + ")")
@@ -513,7 +511,7 @@ d3.csv("deathdays.csv")
               .text("Date");
 
 
-    chartGroup.append("text")
+    chartGroup3.append("text")
               .attr("transform", "rotate(-90)")
               .attr("y", 0 - margin.left)
               .attr("x",0 - (height / 2))
@@ -521,7 +519,7 @@ d3.csv("deathdays.csv")
               .style("text-anchor", "middle")
               .text("No. of Deaths");
 
-      chartGroup.append("g").append("text")
+      chartGroup3.append("g").append("text")
           .attr("x", (width / 2))
           .attr("y", -40)
           .attr("class","title")
@@ -530,7 +528,7 @@ d3.csv("deathdays.csv")
           .style("text-decoration", "bolc")
           .text("Timeline: Date vs. No. of Deaths");
 
-          chartGroup.append("g").append("text")
+          chartGroup3.append("g").append("text")
               .attr("x", (width / 2))
               .attr("y", -40)
               .attr("class","title")
@@ -539,7 +537,7 @@ d3.csv("deathdays.csv")
               .style("text-decoration", "bold")
               .text("Timeline: Date vs. No. of Deaths");
 
-    chartGroup.selectAll("circle")
+    chartGroup3.selectAll("circle")
         .data(data)
         .enter().append("circle")
                 .attr("class", "grp")
@@ -594,15 +592,15 @@ d3.csv("deathdays.csv")
                     var extent = selection.map(x2.invert, x2);
                     data_updated = data.filter(function(d){return d.date>=extent[0]&& d.date<= extent[1];});
 
-                    chartGroup.select(".xaxis")
+                    chartGroup3.select(".xaxis")
                           .call(xAxis);
 
-                    chartGroup.selectAll("path.time")
+                    chartGroup3.selectAll("path.time")
                             .attr("d", line(data_updated))
                             .attr("class","time");
 
-                          chartGroup.selectAll("circle.grp").remove();
-                            chartGroup.selectAll("circle.grp")
+                          chartGroup3.selectAll("circle.grp").remove();
+                            chartGroup3.selectAll("circle.grp")
                                     .data(data_updated)
                                     .enter().append("circle")
                                             .attr("class", "grp")
@@ -643,7 +641,7 @@ d3.csv("deathdays.csv")
 
                 };
 
-                var chartGroup3 = svg3.append("g")
+                var chartGroup4 = svg3.append("g")
                                   .attr("transform","translate(100,80)");
 
               var age_groups = ["0-10","11-20","21-40","41-60","61-80",">80"];
@@ -658,7 +656,7 @@ d3.csv("deathdays.csv")
                                         .sortKeys(function(a,b){ return d3.ascending(a.age, b.age);})
                                         .rollup(function(leaves) { return leaves.length; })
                                         .entries(newdata);
-                            chartGroup3.selectAll(".age_bars").remove();
+                            chartGroup4.selectAll(".age_bars").remove();
 
                             var age_groups = ["0-10","11-20","21-40","41-60","61-80",">80"];
                             var groups = d3.map(nested_data, function(d){return d.key;}).keys();
@@ -696,10 +694,10 @@ d3.csv("deathdays.csv")
                                                                                 return age_groups[i];});
                             var y_axis1 = d3.axisLeft(y1);
 
-                            chartGroup3.append("g").attr("class","age_bars").attr("transform","translate(0,"+height+")").call(x_axis1);
-                            chartGroup3.append("g").attr("class","age_bars").call(y_axis1);
+                            chartGroup4.append("g").attr("class","age_bars").attr("transform","translate(0,"+height+")").call(x_axis1);
+                            chartGroup4.append("g").attr("class","age_bars").call(y_axis1);
 
-                        chartGroup3.append("g")
+                        chartGroup4.append("g")
                                     .selectAll("g")
                                     .data(nested_data)
                                     .enter().append("g")
@@ -735,7 +733,7 @@ d3.csv("deathdays.csv")
                   update_bar();
 
                 //Legends and Axes labels for Bar Chart
-                chartGroup3.append("g").append("text")
+                chartGroup4.append("g").append("text")
                               .attr("x", 200)
                               .attr("y", -20)
                               .attr("class","title2")
@@ -744,7 +742,7 @@ d3.csv("deathdays.csv")
                               .style("text-decoration", "bold")
                               .text("Deaths by Age& Gender");
 
-                chartGroup3.append("text")
+                chartGroup4.append("text")
                           .attr("transform",
                                 "translate(200  ," +
                                                (height + margin.top) + ")")
@@ -753,7 +751,7 @@ d3.csv("deathdays.csv")
                           .text("Age Group");
 
 
-                chartGroup3.append("text")
+                chartGroup4.append("text")
                           .attr("transform", "rotate(-90)")
                           .attr("y", 0 - margin.left)
                           .attr("x",0 - (height / 2))
@@ -764,7 +762,7 @@ D
                 textgender = ["Male","Female"];
                 colorgender = ['#376b37','#c38eb1'];
 
-                chartGroup3.append("rect")
+                chartGroup4.append("rect")
                           .attr("class","legend_2a")
                           .attr("x","480")
                           .attr("y","0")
@@ -774,7 +772,7 @@ D
                           .attr("stroke-width", 2)
                           .attr("fill","none");
 
-                chartGroup3.selectAll("circle")
+                chartGroup4.selectAll("circle")
                           .data(colorsgender)
                           .enter().append("circle")
                           .attr("class","legend_2a")
@@ -784,7 +782,7 @@ D
                           .attr("stroke", "black")
                           .attr("fill",function(d){return d;});
 
-                chartGroup3.append("text")
+                chartGroup4.append("text")
                           .attr("class","legend_2c")
                           .attr("x","520")
                           .attr("y", "75")
@@ -792,7 +790,7 @@ D
                           .style("font-size", "16px")
                           .text("Female");
 
-                chartGroup3.append("text")
+                chartGroup4.append("text")
                           .attr("class","legend_2c")
                           .attr("x","520")
                           .attr("y", "50")
@@ -800,7 +798,7 @@ D
                           .style("font-size", "16px")
                           .text("Male");
 
-                chartGroup3.append("text")
+                chartGroup4.append("text")
                           .attr("class","legend_2b")
                           .attr("x","500")
                           .attr("y","25")
