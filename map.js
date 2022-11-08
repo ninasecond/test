@@ -41,13 +41,13 @@ d3.json("streets.json").get(function(error, data){
         for(var j=0;j<data[p].length;j++){
           d.push({x:data[p][j].x, y: data[p][j].y});
         }
-        var lineFunction = d3.line()
+        var lineFunc = d3.line()
                               .x(function(d,i) { return d.x*30; })
                                .y(function(d,i) { return height - d.y*30; })
                                 .curve(d3.curveLinear);
 
         var lineGraph = chartGroup1.append("path")
-                                    .attr("d", lineFunction(d))
+                                    .attr("d", lineFunc(d))
                                     .attr("stroke", "blue")
                                     .attr("stroke-width", 1.5)
                                     .attr("fill", "none");
@@ -83,7 +83,7 @@ var newdata;
                             return {gender:d.key, count: d.value};
                           });
 
-          var tooltip2 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
+          var tooltip = d3.select("body").append("div").style("opacity","0").style("position","absolute");
           chartGroup1.selectAll("circle.deaths_age_sex")
                               .data(deaths)
                               .enter().append("circle")
@@ -99,6 +99,12 @@ var newdata;
                                                 } else{
                                                   return "#c38eb1";
                                                 }})
+                                        .on("mouseout", function(d){
+                                                d3.select(this)
+                                                   .transition()
+                                                        .attr("r","4");
+                                                    tooltip.style("opacity","0");
+                                            });
                                         .on("mouseover", function(d,i){
                                                 d3.select(this)
                                                     .transition()
@@ -107,21 +113,15 @@ var newdata;
                                                 var index = d.age;
                                                 var age = ["0-10","11-20","21-40","41-60","61-80",">80"];
                                                 if(d.gender==0 ){gender = "male";};
-                                                tooltip2.html(d)
+                                                tooltip.html(d)
                                                         .style("opacity","1")
                                                         .style("left",d3.select(this).attr("cx")+"px")
                                                         .style("top",d3.select(this).attr("cy")+"px")
                                                         .style("background","lightblue")
                                                         .style("border-radius","8px")
                                                         .style("padding","5px");
-                                                  tooltip2.html("Age:"+age[index]+" <br> Gender:"+ gender);
+                                                  tooltip.html("Age:"+age[index]+" <br> Gender:"+ gender);
                                         })
-                                        .on("mouseout", function(d){
-                                                d3.select(this)
-                                                  .transition()
-                                                    .attr("r","4");
-                                                  tooltip2.style("opacity","0");
-                                        });
 });
 
       legend_gender();
@@ -259,7 +259,7 @@ var newdata;
 
   function deaths_by_index(start_index = 0, end_index = deaths.length-1){
     newdata = deaths.slice(start_index, end_index);
-      var tooltip_i = d3.select("body").append("div").style("opacity","0").style("position","absolute");
+      var tooltip2 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
     chartGroup1.selectAll("circle.deaths_age_sex").remove();
       chartGroup1.selectAll("circle.deaths_age_sex")
                 .data(newdata)
@@ -286,7 +286,7 @@ var newdata;
                 var age = ["0-10","11-20","21-40","41-60","61-80",">80"];
                 if(d.gender==0 ){gender = "male";};
 
-                tooltip_i.html(d)
+                tooltip2.html(d)
                         .style("opacity","1")
                         .style("left",d3.select(this).attr("cx")+"px")
                         .style("top",d3.select(this).attr("cy")+200+"px")
@@ -294,13 +294,13 @@ var newdata;
                         .style("border-radius","8px")
                         .style("padding","2px")
                         .style("position" ,"absolute");
-                      tooltip_i.html("Age:"+age[index]+" <br> Gender:"+ gender);
+                      tooltip2.html("Age:"+age[index]+" <br> Gender:"+ gender);
               })
               .on("mouseout", function(d){
                 d3.select(this)
                   .transition()
                     .attr("r","4");
-                  tooltip_i.style("opacity","0");
+                  tooltip2.style("opacity","0");
               });
 
               legend_gender();
@@ -309,7 +309,7 @@ var newdata;
 
 function deaths_by_age(start_index = 0, end_index = deaths.length-1){
   newdata = deaths.slice(start_index, end_index);
-    var tooltip_a = d3.select("body").append("div").style("opacity","0").style("position","absolute");
+    var tooltip3 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
   var colors = ['#d73027','#fc8d59','#fee090','#e0f3f8','#91bfdb','#4575b4'];
   chartGroup1.selectAll("circle.deaths_age_sex").remove();
     chartGroup1.selectAll("circle.deaths_age_sex")
@@ -333,20 +333,20 @@ function deaths_by_age(start_index = 0, end_index = deaths.length-1){
               var index = d.age;
               var age = ["0-10","11-20","21-40","41-60","61-80",">80"];
               if(d.gender==0 ){gender = "male";};
-              tooltip_a.html(d)
+              tooltip3.html(d)
                       .style("opacity","1")
                       .style("left",d3.select(this).attr("cx")+"px")
                       .style("top",d3.select(this).attr("cy")+200+"px")
                       .style("background","lightblue")
                       .style("border-radius","8px")
                       .style("padding","2px");
-                    tooltip_a.html("Age:"+age[index]+" <br> Gender:"+ gender);
+                    tooltip3.html("Age:"+age[index]+" <br> Gender:"+ gender);
             })
             .on("mouseout", function(d){
               d3.select(this)
                 .transition()
                   .attr("r","4");
-                tooltip_a.style("opacity","0");
+                tooltip3.style("opacity","0");
             });
 
             legend_ages();
@@ -456,7 +456,7 @@ d3.csv("deathdays.csv")
     var data_version2 = data;
     var height = 250;
     var width = 600;
-    var tooltip = d3.select("body").append("div").style("opacity","0").style("position","absolute");
+    var tooltip4 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
 
     var max = d3.max(data, function(d){return d.deaths;});
     var minDate = d3.min(data, function(d){return d.date;});
@@ -550,20 +550,20 @@ d3.csv("deathdays.csv")
                   d3.select(this)
                       .transition()
                         .attr("r","6");
-                  tooltip.style("opacity","1")
+                  tooltip4.style("opacity","1")
                              .style("opacity","1")
                              .style("left",d3.mouse(this)[0]+800+"px")
                              .style("top",d3.mouse(this)[1]+100+"px")
                              .style("background","lightblue")
                              .style("border-radius","8px")
                              .style("padding","2px");
-                        tooltip.html("Date:"+formatMonth(d.date)+" <br> No. of Deaths:"+d.deaths);
+                        tooltip4.html("Date:"+formatMonth(d.date)+" <br> No. of Deaths:"+d.deaths);
                 })
                 .on("mouseout", function(d){
                   d3.select(this)
                     .transition()
                       .attr("r","3");
-                    tooltip.style("opacity","0");
+                    tooltip4.style("opacity","0");
                       this.style.fill="black";
                 })
                 .on("click", function(d,i){
@@ -613,20 +613,20 @@ d3.csv("deathdays.csv")
                                               d3.select(this)
                                                   .transition()
                                                     .attr("r","6");
-                                              tooltip.style("opacity","1")
+                                              tooltip4.style("opacity","1")
                                                          .style("opacity","1")
                                                          .style("left",d3.mouse(this)[0]+800+"px")
                                                          .style("top",d3.mouse(this)[1]+100+"px")
                                                          .style("background","lightblue")
                                                          .style("border-radius","8px")
                                                          .style("padding","2px");
-                                                    tooltip.html("Date:"+formatMonth(d.date)+" <br> No. of Deaths:"+d.deaths);
+                                                    tooltip4.html("Date:"+formatMonth(d.date)+" <br> No. of Deaths:"+d.deaths);
                                             })
                                             .on("mouseout", function(d){
                                               d3.select(this)
                                                 .transition()
                                                   .attr("r","3");
-                                                tooltip.style("opacity","0");
+                                                tooltip4.style("opacity","0");
                                                   this.style.fill="black";
                                           })
                                             .on("click", function(d,i){
@@ -651,7 +651,7 @@ d3.csv("deathdays.csv")
 
               window.update_bar = function (start_index = 0, end_index = deaths.length-1){
                         newdata = deaths.slice(start_index, end_index);
-                        var tooltip3 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
+                        var tooltip5 = d3.select("body").append("div").style("opacity","0").style("position","absolute");
                         nested_data = d3.nest()
                                         .key(function(d) { return d.age; })
                                         .key(function(d) { return d.gender; })
@@ -714,17 +714,17 @@ d3.csv("deathdays.csv")
                                         .attr("height", function(d) { return height - y1(d.value); })
                                         .attr("fill", function(d) { return color(d.key); })
                                         .on("mouseover", function(d){
-                                          tooltip3.style("opacity","1")
+                                          tooltip5.style("opacity","1")
                                                      .style("left",d3.event.pageX+"px")
                                                      .style("top",d3.event.pageY+"px")
                                                      .style("background","lightblue")
                                                      .style("border-radius","8px")
                                                      .style("padding","2px");
 
-                                                tooltip3.html("No. of Deaths:"+d.value);
+                                                tooltip5.html("No. of Deaths:"+d.value);
                                         })
                                         .on("mouseout", function(d){
-                                            tooltip3.style("opacity","0");
+                                            tooltip5.style("opacity","0");
                                               this.style.fill=color(d.key);
                                       });
 
@@ -787,18 +787,18 @@ D
                 chartGroup3.append("text")
                           .attr("class","legend_2c")
                           .attr("x","520")
-                          .attr("y", "50")
-                          .attr("text-anchor", "left")
-                          .style("font-size", "16px")
-                          .text("Male");
-
-                chartGroup3.append("text")
-                          .attr("class","legend_2c")
-                          .attr("x","520")
                           .attr("y", "75")
                           .attr("text-anchor", "left")
                           .style("font-size", "16px")
                           .text("Female");
+
+                chartGroup3.append("text")
+                          .attr("class","legend_2c")
+                          .attr("x","520")
+                          .attr("y", "50")
+                          .attr("text-anchor", "left")
+                          .style("font-size", "16px")
+                          .text("Male");
 
                 chartGroup3.append("text")
                           .attr("class","legend_2b")
